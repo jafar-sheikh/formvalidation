@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+         *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            
+        }
+        .is_wrapper{
+            width: 300px;
+            height: 250px;
+            background-color: aliceblue;
+            position: relative;
+            margin: 8% auto;
+            overflow: hidden;
+        }
+        .is_wrapper form{
+            position: absolute;
+            width: 250px;
+            top: 60px;
+            left: 40px;
+            /* transition: 0.5s; */
+        }
+        form input{
+            width: 100%;
+            padding: 10px 5px;
+            margin: 5px 0;
+            border: 0;
+            border-bottom: 1px solid #999;
+            outline: none;
+            background: transparent;
+        }
+        .btn-box{
+            position: absolute;
+            width: 100%;
+            left: 140px;
+            top: 120px;
+        }
+        form button{
+            width: 80px;
+            padding: 10px;
+            border-radius: 30px;
+            cursor: pointer;
+            background: linear-gradient(to right, #ff105f, #ffad06);
+            border: 0;
+        }
+        .d-none{
+            display: none;
+        }
+        #p1{
+            left: 40px;
+            top: 130px;
+            position: absolute;
+        }
+        #h3{
+            position: absolute;
+            top: 90px;
+            left: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="is_wrapper">
+        <form id="form1" name="submit-to-google-sheet">
+            <div class="div1 " id="div1">
+                <input type="text" placeholder="Name" id="text" name="name">
+                <input type="number" placeholder="Phone Number" id="phone" name="phonenumber">
+
+            <div class="btn-box">
+                <button type="button" id="button1" >Next</button>
+            </div>
+            </div>
+            <div class="div2 d-none" id="div2">
+                <input type="text" placeholder="Address" id="Address" name="address">
+            
+
+            <div class="btn-box">
+                <button type="submit" id="button2" >Submit</button>
+            </div>
+            </div>
+        </form>
+        <h3 id="h3"></h3>
+        <p id="p1"></p>
+    </div>
+
+
+
+        <script>
+             let text = document.getElementById('text');
+            let phone = document.getElementById('phone');
+            let button1 = document.getElementById('button1');
+            let button2 = document.getElementById('button2');
+             let form1 = document.getElementById('form1');
+           // let form2 = document.getElementById('form2');
+            let p1 = document.getElementById('p1');
+            let address = document.getElementById('Address');
+            let h3 = document.getElementById('h3');
+            let div1 = document.getElementById('div1');
+            let div2 = document.getElementById('div2');
+
+            let t='';
+            let m='';
+            let a='';
+
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbzOizNmivapBB7aHQ7ljzdn5Z6D4551nThqURuHoKXSKW5l6d27vAecChVojb1wZKeNJg/exec'
+            
+
+
+
+            button1.onclick = function(){
+                const form = document.forms['submit-to-google-sheet']
+            t= text.value;
+            m=phone.value;
+            let regex =/(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$/g;
+ 
+             if(text.value === '' || text.value == null){
+                 text.style.borderBottomColor = 'red';
+                 
+             }
+             else if(phone.value === '' || phone.value == null){
+                 phone.style.borderBottomColor = 'red';
+             }
+              if(regex.test(phone.value)){
+                remove_class(div2, 'd-none');
+                add_class(div1, 'd-none');
+             }
+             else{
+                 phone.style.borderBottomColor = 'red'; 
+             }
+             
+ 
+         }
+
+         form1.addEventListener('submit', (e) =>{
+            a=address.value;
+            e.preventDefault();
+            
+            if(address.value === '' || address.value == null){
+                address.style.borderBottomColor = 'red'
+            }else{
+                // add_class(div2, 'd-none');
+                add_class(form1, 'd-none');
+                p1.innerHTML =t + ' your form submit successfull';
+                h3.innerHTML = 'Thank You';
+                const form = document.forms['submit-to-google-sheet']
+            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                .then(response => console.log('Success!', response))
+                .catch(error => console.error('Error!', error.message))
+            }
+            
+        });
+
+
+
+
+
+
+            function remove_class(element, classname,newclass='') {
+                    element.className = element.className.replace(classname, newclass);
+                }
+            function add_class(element, classname) {
+                    element.classList ? element.classList.add(classname) : element.className += (' ' + classname);
+                }
+
+        </script>
+
+</body>
+</html>
